@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns= [
-    path("",views.day,name="day"),
-    path("",views.week,name="week"),
-    path("",views.month,name="month")
+    path("day/",views.day,name="day"),
+    path("week/",views.week,name="week"),
+    path("month/",views.month,name="month")
 ]
