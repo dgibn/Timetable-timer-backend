@@ -1,0 +1,10 @@
+<h1>Events in your Day</h1>
+
+
+{% for item in day%}
+
+    <p>{{ item }} - <a href = "{% url 'update' item.id %}">Update</a> - <a href = "{% url 'delete' item.id %}">Delete</a></p>
+
+{% endfor %}
+
+<a href = "{% url 'add' %}">Add Event</a>

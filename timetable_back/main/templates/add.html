@@ -1,0 +1,22 @@
+
+
+<form method="POST" action="{% url 'add'%}">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Event Title" name="name">
+    </div>
+
+    <div class="mb-3">
+        <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Description" name="desc">
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1" name="done">
+      <label class="form-check-label" for="exampleCheck1">Done</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <a href = "{% url 'day' %}">My Events</a>
