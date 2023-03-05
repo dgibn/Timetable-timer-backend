@@ -4,4 +4,4 @@ from main.models import Event
 class Eventreg(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'desc', 'done']
+        fields = ['name', 'desc', 'stime', 'etime', 'done']
