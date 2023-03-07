@@ -1,69 +1,63 @@
 from django.shortcuts import render,redirect
 from main.models import Event
-from main.forms import Eventreg
 from .serializers import timetable_serializer
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
 
 
  
-
-
-
-
 # Create your views here.
 
-def day(request):
-    day_events = Event.objects.all
-    return render(request, 'day.html', { 'day' : day_events })
-
-def week(request):
-    return render(request, 'week.html', {})
-
-def month(request):
-    return render(request, 'month.html', {})
-
-def add(request):
-
-    if request.method =="POST":
-        form = Eventreg(request.POST or None)
-        if form.is_valid():
-            form.save()
-        print("data saved")
-        return redirect('add')
-
-    else:
-        return render(request, 'add.html', {})
-    
-def update(request, event_id):
-    
-    update_event = Event.objects.get(pk=event_id)
-    form = Eventreg(request.POST or None, instance=update_event)
-    if form.is_valid():
-        form.save()
-        return redirect('day')
-
-    return render(request, 'update.html', 
-                  { 'uevent' : update_event, 'form' : form})
-
-def delete(request, event_id):
-    delete_event = Event.objects.get(pk=event_id)
-    delete_event.delete()
-    return redirect('day')
 
 @api_view(['GET'])
-def Event_detail(request,pk):
+def Event_detail(request,pk):               #get detail of a particular event
     event = Event.objects.get(id=pk)
     serializer = timetable_serializer(event)
     return Response(serializer.data)
 
 @api_view(['GET'])
-def Event_detail_all(request):
+def Event_detail_all(request):              #get detail of all events
         event = Event.objects.all()
         serializer = timetable_serializer(event,many=True)
         return Response(serializer.data)
+
+@api_view(['POST'])
+def add_Event(request):                     #add a new event(input in json format)
+    serializer = timetable_serializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response()
+
+@api_view(['PUT'])
+def update_event(request,pk):          #update an event
+    try:
+        instance = Event.objects.get(pk=pk)
+    except Event.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    serializer = timetable_serializer(instance, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    
+
+@api_view(['DELETE'])                       #delete an event
+def delete_event(self,pk):
+    event = Event.objects.get(id=pk)
+    event.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+    
+
+
+
+     
+     
 
 
 
